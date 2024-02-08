@@ -1,0 +1,17 @@
+# create named volume for persistant data
+docker volume create volume_name
+
+# find location of volume
+docker volume inspect volume_name
+
+# create mount point in container for persistant volume
+docker run -v volume_name:/path/in/container container_name
+
+# create a mount point that is an already existing folder, useful for dev work, $(pwd) is current working dir
+docker run -v "$(pwd):/path/in/container"
+
+# list docker volumes
+docker volume list
+
+# delete docker volume
+docker volume remove volume_name

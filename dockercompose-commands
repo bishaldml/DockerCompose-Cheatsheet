@@ -1,0 +1,25 @@
+# run command to start from a compose file and run in background
+docker-compose up -d
+
+# kill a compose setup
+docker-compose down
+
+# kill a compose setup AND wipe volumes
+docker-compose down --volumes
+
+# secrets in env variables
+#   you can prepend FILE__ to many env variables to then load from a file, instead of putting secret in the command
+#   eg. -e PASSWORD=Toast becomes -e FILE__PASSWORD=/some/secret.txt
+
+# run the app via compose, removing container once complete
+docker-compose run --rm app
+
+# run another python item inside the container via compose
+docker-compose run --rm app somefile.py
+
+# rebuild the image to pull in new data
+docker-compose build
+docker-compose -f docker-compose.dev.yml build
+
+# dev environment example
+docker-compose -f docker-compose.dev.yml run --rm app-dev other.py

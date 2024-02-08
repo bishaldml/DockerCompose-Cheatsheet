@@ -1,0 +1,40 @@
+# Load container base image
+FROM python:alpine
+
+# Create and set variables
+ARG ENVIR="DEV"
+ARG VENV_PATH=/opt/.venv
+ARG APP_DIR=/usr/src/app/docker_python_template
+
+# Set where shell commands will run from
+WORKDIR /usr/src/app
+
+# Below libraries may be required depending on pip requirements
+#RUN apk update && apk add --no-cache gcc musl-dev linux-headers
+
+# Set environment variables and createa Python venv
+ENV VIRTUAL_ENV=$VENV_PATH
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# Update pip ready for requirements
+RUN pip install --upgrade pip
+RUN pip install --upgrade setuptools
+RUN pip install wheel
+
+# Copy just requirements and pip install them, this reduces the amount of container changes in the future, as the requirements file may stay static, while the rest of the project files change
+COPY requirements.txt .
+COPY requirements.dev.txt .
+RUN if [ "$ENVIR" = "PROD" ] ; then pip install -r requirements.txt ; else pip install -r requirements.dev.txt ; fi
+
+# Copy all files that exist where you ran this Dockerfile into the WORKDIR
+COPY . .
+
+# Move into the application subdirectory
+WORKDIR $APP_DIR
+
+# What runtime to execute
+ENTRYPOINT ["python"]
+
+# Commands attached to executable
+CMD ["main.py"]

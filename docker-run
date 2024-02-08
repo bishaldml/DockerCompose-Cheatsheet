@@ -1,0 +1,32 @@
+# docker-compose.yml files remove the need for these as the command can get quite complex
+docker run --rm -d -p --name container_name 1000:1000 -w /folder/name -v volume_name:/path/in/container --network network_name --network-alias container_network_name sh -c "echo 'hello world'"
+
+# automatically remove the container image once closed
+--rm
+
+# detach/daemon mode, run container in background
+-d
+
+# expose network ports, first item is container port, second is hosts port
+-p 1000:1000
+
+# set a name for the running container, otherwise it will be given a random phrase name
+--name container_name
+
+# sets working directory in container
+-w /folder
+
+# sets volume mount in container
+-v volume_name:/path/in/container
+
+# attach network to container
+--network network_name
+
+# give an network alias to container network, similar to dns name
+--network-alias container_network_name
+
+# you can run additional commands at the end of a docker run command, this will run a command in the default shell
+sh -c "echo 'hello world'"
+
+# interactive and terminal options to type in commands after container starts
+-it

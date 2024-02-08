@@ -1,0 +1,46 @@
+# docker-compose specification version
+version: "3.8"
+
+# list each distinct container to run
+services:
+  # name of container
+  app:
+    image: node:12-alpine
+    # commands to run at build
+    command: sh -c "yarn install && yarn run dev"
+    # pull pass from secrets file below
+    secrets:
+      - db-password
+    restart: always
+    ports:
+      - 3000:3000
+    # change working dir
+    working_dir: /app
+    # link an existing dir to a folder in the container
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD_FILE=/run/secrets/db-password
+      MYSQL_DB: todos
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    secrets:
+      - db-password
+    # link to stored Docker container volume
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
+      MYSQL_DATABASE: todos
+
+volumes:
+  todo-mysql-data:
+
+# store sensitive data without it being exposed in docker-compose file
+secrets:
+  db-password:
+    file: db/password.txt

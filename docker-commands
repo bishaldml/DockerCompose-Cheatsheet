@@ -1,0 +1,58 @@
+# search for Docker containers on Docker Hub
+docker search container_name
+
+# download container from Docker Hub
+docker pull container_name
+
+# show all running containers
+docker ps
+
+# show all existing containers
+docker ps -a
+
+# start docker container
+docker start container_id_or_tag
+
+# stop docker container
+docker stop container_id_or_tag
+
+# delete a stopped container
+docker rm container_id_or_tag
+
+# stop and remove container in one command
+docker rm -f container_id_or_tag
+
+# remove all docker containers
+docker rm $(docker ps -aq)
+
+# list all images on computer
+docker images
+
+# check file size of container items for troubleshooting size issues
+docker image history container_id
+
+# delete a specific image
+docker rmi image_id
+
+# delete all images
+docker rmi $(docker images -q)
+
+# monitor container logs
+docker logs -f container_id_or_tag
+
+# execute a command in a running docker container
+# -i - interactive command
+# -t - run in terminal
+docker exec -it container_id_or_tag command
+
+# update an image
+#   build new container with Dockerfile in current dir
+docker build -t container_name .
+#   stop and remove old container
+#   use docker run or docker-compose to start updated container
+
+# create new container from other container
+docker commit -m "change comment" -a "author_name" docker_image_number dockerhub_user/docker_image_name
+
+# scan for security vulnerabilities
+docker scan ContainerID

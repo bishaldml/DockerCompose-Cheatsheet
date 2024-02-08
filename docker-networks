@@ -1,0 +1,19 @@
+# create docker network
+docker network create network_name
+
+# list docker networks
+docker network list
+
+# delete docker network
+docker network remove network_name
+
+# attach a container to a network and give network alias
+docker run -d --network todo-app --network-alias mysql -v todo-mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=todos mysql:5.7
+--network todo-app - network to use
+--network-alias mysql - alias name for connection, a dns name
+
+# troubleshoot docker networks
+#   install and run a network troubleshooting container in your docker network
+docker run -it --network network_name nicolaka/netshoot
+#   run the dig command against other containers network alias to report ip address and other settings
+dig network_alias
